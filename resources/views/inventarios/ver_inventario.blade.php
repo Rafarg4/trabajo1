@@ -71,7 +71,7 @@
         </div>
         @endif
         <h1>Listado de medicamentos </h1>
-        <a href="{{ url('ver_formulario_expediente') }}" class="btn btn-primary">Nuevo</a>
+        <a href="{{ url('cargar_inventario') }}" class="btn btn-primary">Nuevo</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -92,9 +92,36 @@
                     <td>{{ $inven->stock_minimo }}</td>
                     <td>{{ $inven->estado }}</td>
                     <td>
-                    <a  href="{{route('detalles',$iven->id)}}" type="button" class="btn btn-primary">
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#reponerModal-{{ $inven->id }}" class="btn btn-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Reponer
+                    </a>
+                    <a  href="{{route('entradas',$inven->id)}}" type="button" class="btn btn-primary">
                     <i class="fa fa-list-ul" aria-hidden="true"></i>
                     </a>
+                    <!-- Modal para ingresar la cantidad a reponer -->
+                    <div class="modal fade" id="reponerModal-{{ $inven->id }}" tabindex="-1" aria-labelledby="reponerModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reponerModalLabel">Reponer Inventario</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ url('reponer_stock', $inven->id) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="cantidad" class="form-label">Cantidad a reponer:</label>
+                                            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     </td>
                 @endforeach
             </tbody>

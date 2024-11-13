@@ -55,3 +55,7 @@ Route::get('/pdf/{id}',[ExpedienteController::class,'pdf'])->name('pdf');
 
 //Iventario
 Route::get('/ver_inventario', [InventarioController::class, 'ver_inventario'])->name('ver_inventario');
+Route::get('/cargar_inventario', [InventarioController::class, 'cargar_inventario'])->name('cargar_inventario');
+Route::post('/crear_inventario', [InventarioController::class, 'crear_inventario']);
+Route::post('/reponer_stock/{id}', [InventarioController::class, 'reponer_stock'])->name('reponer_stock');
+Route::get('/entradas/{id}', [InventarioController::class, 'entradas'])->name('entradas');
