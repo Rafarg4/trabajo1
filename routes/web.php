@@ -59,3 +59,6 @@ Route::get('/cargar_inventario', [InventarioController::class, 'cargar_inventari
 Route::post('/crear_inventario', [InventarioController::class, 'crear_inventario']);
 Route::post('/reponer_stock/{id}', [InventarioController::class, 'reponer_stock'])->name('reponer_stock');
 Route::get('/entradas/{id}', [InventarioController::class, 'entradas'])->name('entradas');
+
+//Medicamento
+Route::post('/guardar_medicamento', [ExpedienteController::class, 'guardar_medicamento']);

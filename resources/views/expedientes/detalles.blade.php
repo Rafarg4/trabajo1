@@ -208,6 +208,49 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalmedicamento" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Cargar pagos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('guardar_medicamento') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="sintomas">Descripcion:</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">Cantidad:</label>
+                        <input type="int" class="form-control" id="cantidad" name="cantidad" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="receta">Fecha de entrega:</label>
+                        <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Medicamento:</label>
+                        <select class="form-control" id="id_inventario" name="id_inventario">
+                            <option value="" disabled selected>-- Selecciona una opción --</option>
+                            @foreach($inventarios as $id => $nombre)
+                                <option value="{{ $id }}">{{ $nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                        <input type="hidden" class="form-control" id="id_expediente" name="id_expediente" readonly value="{{ $expedientes->id }}">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Consultas</a>
@@ -290,8 +333,32 @@
   </div>
   <!-- Tercera pestaña: Contact -->
   <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-    <!-- Contenido para la pestaña Contact -->
-    <h1>Medicamentos</h1>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalmedicamento">
+    Nuevo
+</button>  
+  <!-- Contenido para la pestaña Profile -->
+    <center><h5>Listado de Pagos</h5></center>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Descripcion</th>
+          <th>Cantidad</th>
+          <th>Fecha de entrega</th>
+          <th>Mecicamento</th>
+        </tr>
+      </thead>
+      <tbody>
+      @foreach ($medicamentos as $medi)
+          <tr>
+            <td>{{$medi->descripcion}}</td>
+            <td>{{$medi->cantidad}}</td>
+            <td>{{$medi->fecha_entrega}}</td>
+            <td>{{$medi->id_inventario}}</td>
+          </tr>
+          @endforeach
+      </tbody>
+    </table>
+  </div>
   </div>
 </div>
 

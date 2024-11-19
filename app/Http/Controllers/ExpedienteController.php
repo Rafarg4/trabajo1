@@ -10,6 +10,9 @@ use App\Models\Consulta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Pago;
+use App\Models\Medicamento;
+use App\Models\Inventario;
+use Illuminate\Support\Facades\DB;
 
 class ExpedienteController extends Controller
 {
@@ -56,8 +59,14 @@ public function detalles($id){
     $pagos = Pago::with('expedientes')
     ->where('id_expediente',$id)
     ->get();
+
+    $medicamentos = Medicamento::all();
+    
+    $inventarios = Inventario::pluck('nombre', 'id');
+  
+ //return $inventarios;
     //return $consultas;
-    return view('expedientes.detalles',compact('pagos','expedientes','consultas'));
+    return view('expedientes.detalles',compact('inventarios','medicamentos','pagos','expedientes','consultas'));
     }
     public function guardar_consulta(Request $request){
        //return $request->all();
@@ -100,4 +109,30 @@ public function detalles($id){
       $pdf =Pdf::loadView('expedientes.pdf',compact('expedientes','consultas'));
       return  $pdf->download('Expediente_'.$id. '.pdf');
         }
+        public function guardar_medicamento (Request $request){
+            //return $request->all();
+            $cantidad = $request->input('cantidad');
+            $id_inventario = $request->input('id_inventario');
+            //return $request->all();
+             $medicamento = Medicamento::create([
+                 'descripcion' => $request->descripcion,
+                 'id_inventario' => $request->id_inventario,
+                 'id_expediente' => $request->id_expediente,
+                 'fecha_entrega' => $request->fecha_entrega,
+                 'cantidad' => $request->cantidad,
+             ]);
+             Inventario::where('id',$id_inventario)
+             ->decrement('cantidad',$cantidad);
+             $salidas = DB::table('salida_medicamentos')->insert(
+                [
+                    'id_medicamento' => $request->id_inventario,
+                    'cantidad'=>$request->cantidad,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+                );
+             return redirect()->back()->with('success', 'Datos guardados correctamente.');
+             
+         }
+
 }
